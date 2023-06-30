@@ -32,7 +32,15 @@ void setup() {
 
 void loop() {
   float digitalVal = analogRead(ANALOGPIN); // Read in digital value in range 0 - 1023 from ADC pin
-  float analogVoltage = vref*digitalVal/maxDigVal; // Convert digital value to analog voltage 
+  float analogVoltage = vref*digitalVal/maxDigVal; // Convert digital value to analog voltage
+
+  // Comment below out if don't want bounds on serial plotter (if using this code to take actual data then having the bounds will introduce unwanted values)
+  Serial.print(0);
+  Serial.print(" ");
+  Serial.print(5);
+  Serial.print(" ");
+  // ---
+  
   Serial.println(analogVoltage); // Write analog voltage to serial
   delay(DELAYTIME); // delay for specified time before sending next sample
 }
