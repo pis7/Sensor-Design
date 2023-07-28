@@ -21,6 +21,7 @@ float maxDigVal = 1023; // Maximum digital value of ADC (10-bit ADC for the boar
 float vref = 5.0; // Reference voltage used
 int prevTime = 0;
 int thisTime = 0;
+float threshold = 1.0;
 bool getPtDone = false;
 
 
@@ -34,7 +35,7 @@ void setup() {
 void loop() {
   float digitalVal = analogRead(ANALOGPIN); // Read in digital value in range 0 - 1023 from ADC pin
   float analogVoltage = vref*digitalVal/maxDigVal; // Convert digital value to analog voltage
-  if (analogVoltage > 1.0 && getPtDone == false) {
+  if (analogVoltage > threshold && getPtDone == false) { // If analogVoltage crosses threshold when it previously did not
     prevTime = thisTime;
     thisTime = millis(); // Obtain time points
     float speed = CIRCUM / (float) (thisTime - prevTime); // v = d/t in ft/ms
@@ -42,7 +43,7 @@ void loop() {
     Serial.println(speed);
     getPtDone = true;
   }
-  if (analogVoltage < 1.0 && getPtDone == true) { // Once analogVoltage has decreased back down from a high level, reset bool to trigger on next point
+  if (analogVoltage < threshold && getPtDone == true) { // Once analogVoltage has decreased back down from a high level, reset bool to trigger on next point
     getPtDone = false;
   }
   delay(DELAYTIME); // delay for specified time before sending next sample
