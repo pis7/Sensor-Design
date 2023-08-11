@@ -19,10 +19,16 @@ float maxDigVal = 1023; // Maximum digital value of ADC (10-bit ADC for the boar
 
 // Initialize variables - CHANGE FOLLOWING PARAMETERS AS NEEDED (MUST MATCH IN PYTHON) -----------------------------------------
 #define BAUDRATE 9600 // Serial baudrate
-#define ANALOGPIN0 0 // Analog pin used for temperature
-#define ANALOGPIN1 1 // Analog pin used for humidity
-#define DELAYTIME 100 // Delay time in msec
+#define ANALOGPIN 0 // Analog pin used for Vout
+#define DELAYTIME 1 // Delay time in msec
+#define CIRCUM 2*3.14159265*0.5625 // 2*pi*radius (ft)
 float vref = 5.0; // Reference voltage used
+int prevTime = 0;
+int thisTime = 0;
+float threshold = 3.0;
+bool getPtDone = false;
+float thisDiff = 0;
+float prevDiff = 0;
 
 // Main functions, REMEMBER TO FLASH CODE TO ARDUINO IF CHANGES MADE -----------------------------------------------------------
 
@@ -32,20 +38,24 @@ void setup() {
 }
 
 void loop() {
-  float digitalVal0 = analogRead(ANALOGPIN0); // Read in digital value in range 0 - 1023 from ADC pin
+  prevDiff = thisDiff;
+  float digitalVal0 = analogRead(ANALOGPIN); // Read in digital value in range 0 - 1023 from ADC pin
   float analogVoltage0 = vref*digitalVal0/maxDigVal; // Convert digital value to analog voltage
-  float digitalVal1 = analogRead(ANALOGPIN1); // Read in digital value in range 0 - 1023 from ADC pin
-  float analogVoltage1 = vref*digitalVal1/maxDigVal; // Convert digital value to analog voltage
-
-  // Comment below out if don't want bounds on serial plotter (if using this code to take actual data then having the bounds will introduce unwanted values)
-  Serial.print(0);
-  Serial.print(" ");
-  Serial.print(1);
-  Serial.print(" ");
-  // ---
-  
-  //Serial.println(analogVoltage0); // Write analog voltage to serial
-  //Serial.println(analogVoltage1); // Write analog voltage to serial
-  Serial.println(analogVoltage0 - analogVoltage1);
+  // Serial.print(0);
+  // Serial.print(" ");
+  // Serial.print(5);
+  // Serial.print(" ");
+  // Serial.println(analogVoltage0);
+  if (analogVoltage0 > threshold && getPtDone == false) { // If large difference between new and previous values and crosses 
+    prevTime = thisTime;
+    thisTime = millis(); // Obtain time points
+    float speed = CIRCUM / (float) (thisTime - prevTime); // v = d/t in ft/ms
+    speed = 1000.0 * 3600.0 * speed / 5280.0; // get v in mph
+    Serial.println(speed);
+    getPtDone = true;
+  }
+  if (analogVoltage0 < threshold && getPtDone == true) { // Once no longer large distance, reset bool to trigger on next point
+    getPtDone = false;
+  }
   delay(DELAYTIME); // delay for specified time before sending next sample
 }

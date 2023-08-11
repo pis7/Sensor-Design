@@ -10,8 +10,6 @@ voltage used and delay time between samples which must match those in the additi
 a specified analog pin on the Arduino every delayTime milliseconds and converts it from the digital value back to a voltage to be sent over serial
 and used by the Python plotting code.
 
-In order to see the sound wave in real time, the delay() function has been commented out. 
-
 References:
 - ADC: https://www.electronicwings.com/arduino/adc-in-arduino, https://cdn.arduino.cc/reference/en/language/functions/analog-io/analogreference/
 - Serial: https://www.arduino.cc/reference/en/language/functions/communication/serial/
@@ -21,8 +19,9 @@ float maxDigVal = 1023; // Maximum digital value of ADC (10-bit ADC for the boar
 
 // Initialize variables - CHANGE FOLLOWING PARAMETERS AS NEEDED (MUST MATCH IN PYTHON) -----------------------------------------
 #define BAUDRATE 9600 // Serial baudrate
-#define ANALOGPIN 0 // Analog pin used for sensor input
-#define DELAYTIME 60 // Delay time in msec
+#define ANALOGPIN0 0 // Analog pin used for positive sensor output
+#define ANALOGPIN1 1 // Analog pin used for negative sensor output
+#define DELAYTIME 1 // Delay time in msec
 float vref = 5.0; // Reference voltage used
 
 // Main functions, REMEMBER TO FLASH CODE TO ARDUINO IF CHANGES MADE -----------------------------------------------------------
@@ -33,8 +32,10 @@ void setup() {
 }
 
 void loop() {
-  float digitalVal = analogRead(ANALOGPIN); // Read in digital value in range 0 - 1023 from ADC pin
-  float analogVoltage = vref*digitalVal/maxDigVal; // Convert digital value to analog voltage
+  float digitalVal0 = analogRead(ANALOGPIN0); // Read in digital value in range 0 - 1023 from ADC pin
+  float analogVoltage0 = vref*digitalVal0/maxDigVal; // Convert digital value to analog voltage
+  float digitalVal1 = analogRead(ANALOGPIN1); // Read in digital value in range 0 - 1023 from ADC pin
+  float analogVoltage1 = vref*digitalVal1/maxDigVal; // Convert digital value to analog voltage
 
   // Comment below out if don't want bounds on serial plotter (if using this code to take actual data then having the bounds will introduce unwanted values)
   Serial.print(0);
@@ -43,6 +44,6 @@ void loop() {
   Serial.print(" ");
   // ---
   
-  Serial.println(analogVoltage); // Write analog voltage to serial
-  //delay(DELAYTIME); // delay for specified time before sending next sample
+  Serial.println(analogVoltage0 - analogVoltage1); // Write analog voltage to serial
+  delay(DELAYTIME); // delay for specified time before sending next sample
 }
