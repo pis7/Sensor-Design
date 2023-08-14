@@ -1,11 +1,24 @@
+/*
+Title: Read Distance from Integrated LIDAR Sensor
+Author: Parker Schless (pis7)
+Date: 6/1/23
+Version: 1.1
+
+Summary:
+This code reads the distance in cm from an integrated LIDAR sensor using I2C
+
+References:
+- Wire: https://www.arduino.cc/reference/en/language/functions/communication/wire/
+*/
+
 #include <Wire.h>
 
-#define LIDARADDR 0x62 // I2C address of sensor
+#define LIDARADDR 0x62 // I2C address of LIDAR sensor
 
-int busy_flag = 0;
+int busy_flag = 0; // High if device is busy and cannot take commands
 uint8_t upper_reading = 0x00;
 uint8_t lower_reading = 0x00;
-char output[100];
+char output[100]; // Formatted output string
 
 void setup() {
   Wire.begin();

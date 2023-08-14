@@ -1,14 +1,11 @@
 /*
-Title: Read ADC Values and Send to Serial
+Title: Read ADC Values from non-PIR Sensor
 Author: Parker Schless (pis7)
 Date: 6/1/23
 Version: 1.1
 
 Summary:
-This is the Arduino support code for plotting sensor data in the Sensor Design course. This code initializes some variables including reference
-voltage used and delay time between samples which must match those in the additional Python code. Then, it simply reads in an analog voltage from
-a specified analog pin on the Arduino every delayTime milliseconds and converts it from the digital value back to a voltage to be sent over serial
-and used by the Python plotting code.
+This code reads the ADC vale from a non-PIR sensor used in the lab and drives the LED if the signal is above a certain threshold.
 
 References:
 - ADC: https://www.electronicwings.com/arduino/adc-in-arduino, https://cdn.arduino.cc/reference/en/language/functions/analog-io/analogreference/
@@ -48,10 +45,11 @@ void loop() {
   Serial.print(" ");
   Serial.println(analogVoltage);
 
+  // Turn on LED if Vpp is >= threshold
   if (analogVoltage >= threshold) {
     digitalWrite(LEDPIN, LOW);
     ledTime = 0;
-  } else if (ledTime > LEDDELAY) {
+  } else if (ledTime > LEDDELAY) { // else turn off LED if a certain amount of time has passed
     digitalWrite(LEDPIN, HIGH);
     ledTime = 0;
   }

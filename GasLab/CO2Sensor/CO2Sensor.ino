@@ -1,5 +1,18 @@
+/*
+Title: Read CO2 Level from Integrated CO2 Sensor
+Author: Parker Schless (pis7)
+Date: 6/1/23
+Version: 1.1
+
+Summary:
+This code reads the CO2 level from the interated CO2 sensor in ppm using I2C
+
+References:
+- Wire: https://www.arduino.cc/reference/en/language/functions/communication/wire/
+*/
+
 #include <Wire.h>
-#define ADDR 0x52
+#define ADDR 0x52 // I2C peripheral address of sensor
 
 bool new_data = false;
 
@@ -41,5 +54,4 @@ void loop() {
   char output[256];
   sprintf(output, "eCO2: %u ppm", reading); // Format output string
   Serial.println("eCO2");
-
 }

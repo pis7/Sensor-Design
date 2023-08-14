@@ -1,14 +1,12 @@
 /*
-Title: Read ADC Values and Send to Serial
+Title: Calculate Linear Speed of Wheel from AMR Sensor
 Author: Parker Schless (pis7)
 Date: 6/1/23
 Version: 1.1
 
 Summary:
-This is the Arduino support code for plotting sensor data in the Sensor Design course. This code initializes some variables including reference
-voltage used and delay time between samples which must match those in the additional Python code. Then, it simply reads in an analog voltage from
-a specified analog pin on the Arduino every delayTime milliseconds and converts it from the digital value back to a voltage to be sent over serial
-and used by the Python plotting code.
+This code reads the ADC value from an AMR sensor and uses the time between magnet detections (signal peaks) to calculate speed from
+the equation v = d / t where d is the circumference of the wheel and t is the time between magnet detections.
 
 References:
 - ADC: https://www.electronicwings.com/arduino/adc-in-arduino, https://cdn.arduino.cc/reference/en/language/functions/analog-io/analogreference/
@@ -41,11 +39,13 @@ void loop() {
   prevDiff = thisDiff;
   float digitalVal0 = analogRead(ANALOGPIN); // Read in digital value in range 0 - 1023 from ADC pin
   float analogVoltage0 = vref*digitalVal0/maxDigVal; // Convert digital value to analog voltage
-  // Serial.print(0);
-  // Serial.print(" ");
-  // Serial.print(5);
-  // Serial.print(" ");
-  // Serial.println(analogVoltage0);
+
+  Serial.print(0);
+  Serial.print(" ");
+  Serial.print(5);
+  Serial.print(" ");
+  Serial.println(analogVoltage0);
+
   if (analogVoltage0 > threshold && getPtDone == false) { // If large difference between new and previous values and crosses 
     prevTime = thisTime;
     thisTime = millis(); // Obtain time points

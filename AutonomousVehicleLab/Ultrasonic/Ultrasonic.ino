@@ -1,6 +1,14 @@
 /*
-* A Sensitive DIY Ultrasonic Range Sensor
-* http://www.kerrywong.com
+Title: Calculate distance from DIY Ultrasonic Transceiver
+Author: Parker Schless (pis7)
+Date: 6/1/23
+Version: 1.1
+
+Summary:
+This code generates a PWM pulse for an ultrasonic transmitter and reads the analog result from an ultrasonic receiver to calculate distance using the time between received pulses.
+
+References (This code is pretty much the same as that seen in the below link but tweaked for 40 kHz ultrasonic devices and Arduino Mega):
+- http://www.kerrywong.com/2011/01/22/a-sensitive-diy-ultrasonic-range-sensor/
 */
 
 #define FREQ 40000.0 // Frequency in Hz of transmitter and receiver used

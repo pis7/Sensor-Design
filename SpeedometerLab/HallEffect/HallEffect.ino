@@ -1,10 +1,12 @@
 /*
-Title: Calculate Linear Speed of Wheel
+Title: Calculate Linear Speed of Wheel from Hall-Effect Sensor
 Author: Parker Schless (pis7)
 Date: 7/26/23
 Version: 1.0
 
 Summary:
+This code reads the ADc value from a hall-effect sensor and uses the time between magnet detections (signal peaks) to calculate speed from
+the equation v = d / t where d is the circumference of the wheel and t is the time between magnet detections.
 
 References:
 - ADC: https://www.electronicwings.com/arduino/adc-in-arduino, https://cdn.arduino.cc/reference/en/language/functions/analog-io/analogreference/
